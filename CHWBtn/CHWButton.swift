@@ -67,7 +67,7 @@ class CHWButton: UIButton {
             self.rotateAnimation()
         }
 
-        println("pass")
+        print("pass")
     }
     
 //    倒计时开始
@@ -161,6 +161,7 @@ class CHWButton: UIButton {
         animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
         animation.duration = duration
         animation.repeatCount = HUGE
+        animation.fillMode = kCAFillModeForwards
         animation.removedOnCompletion = false
         animation.beginTime = beginTime
         timeLabel.layer.addAnimation(animation, forKey: "animation")
