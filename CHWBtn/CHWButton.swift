@@ -16,18 +16,19 @@ class CHWButton: UIButton {
     // 正常的颜色
     private var normal_bgColor = UIColor(red: CGFloat(237 / 255.0), green: CGFloat(85 / 255.0), blue: CGFloat(101 / 255.0), alpha: 1)
     // 倒计时中的颜色
-    var enabled_bgColor = UIColor.lightGrayColor()
-    private var timer: NSTimer!
+    var enabled_bgColor = UIColor.lightGray
+    private var timer: Timer!
     private var startCount = 0
     private var originNum = 0
     //倒计时Label
     private var timeLabel = UILabel()
     var animaType = CountBtnType.CHWBtnTypeScale
     
-    convenience init(count: Int,frame: CGRect , var color: UIColor?) {
+    convenience init(count: Int,frame: CGRect , color: UIColor?) {
+        var color = color
         self.init(frame: frame)
-        self.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-        self.titleLabel?.font = UIFont.systemFontOfSize(17)
+        self.setTitleColor(UIColor.white, for: .normal)
+        self.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         //如果设定的有colo就显示color，没有就显示默认的
         if color == nil {
             color = normal_bgColor
@@ -38,15 +39,15 @@ class CHWButton: UIButton {
         self.startCount = count
         self.originNum = count
         self.addLabel()
-        super.addTarget(self, action: Selector("startCountDown"), forControlEvents: UIControlEvents.TouchUpInside )
+        super.addTarget(self, action: #selector(startCountDown), for: .touchUpInside )
     }
     
 //    倒计时的Label
     func addLabel() {
-        timeLabel.frame = CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame))
-        timeLabel.backgroundColor = UIColor.clearColor()
-        timeLabel.font = UIFont.systemFontOfSize(17.0)
-        timeLabel.textAlignment = NSTextAlignment.Center
+        timeLabel.frame = CGRect(x: 0,y: 0,width: self.frame.width,height: self.frame.height)
+        timeLabel.backgroundColor = UIColor.clear
+        timeLabel.font = UIFont.systemFont(ofSize: 17.0)
+        timeLabel.textAlignment = NSTextAlignment.center
         timeLabel.text = "\(self.originNum)"
         self.addSubview(timeLabel)
         
@@ -54,10 +55,10 @@ class CHWButton: UIButton {
 
 //    开启定时器
     func startCountDown() {
-        self.timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("countDown"), userInfo: nil, repeats: true)
+        self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(countDown), userInfo: nil, repeats: true)
         self.backgroundColor = enabled_bgColor
 //        self.setTitleColor(UIColor.blackColor(), forState: UIControlState.Disabled)
-        self.enabled = false
+        self.isEnabled = false
         
         //动画开始
         switch self.animaType {
@@ -72,7 +73,7 @@ class CHWButton: UIButton {
     
 //    倒计时开始
     func countDown() {
-        self.startCount--
+        self.startCount -= 1
         timeLabel.text = "\(self.startCount)"
         
        //倒计时完成后停止定时器，移除动画
@@ -84,7 +85,7 @@ class CHWButton: UIButton {
             timeLabel.text = "\(self.originNum)"
             self.timer.invalidate()
             self.timer = nil
-            self.enabled = true
+            self.isEnabled = true
             self.startCount = self.originNum
             self.backgroundColor = normal_bgColor
         }
@@ -117,10 +118,10 @@ class CHWButton: UIButton {
         animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
         animation.duration = duration
         animation.repeatCount = HUGE
-        animation.removedOnCompletion = false
+        animation.isRemovedOnCompletion = false
 
         animation.beginTime = beginTime
-        timeLabel.layer.addAnimation(animation, forKey: "animation")
+        timeLabel.layer.add(animation, forKey: "animation")
         self.layer.addSublayer(timeLabel.layer)
 
     }
@@ -133,8 +134,8 @@ class CHWButton: UIButton {
 
         // Rotate animation
         let rotateAnimation  = CABasicAnimation(keyPath: "transform.rotation.z")
-        rotateAnimation.fromValue = NSNumber(int: 0)
-        rotateAnimation.toValue = NSNumber(double: M_PI * 2)
+        rotateAnimation.fromValue = NSNumber(value: 0)
+        rotateAnimation.toValue = NSNumber(value: M_PI * 2)
         rotateAnimation.duration = duration;
         
         // Scale animation
@@ -162,9 +163,9 @@ class CHWButton: UIButton {
         animation.duration = duration
         animation.repeatCount = HUGE
         animation.fillMode = kCAFillModeForwards
-        animation.removedOnCompletion = false
+        animation.isRemovedOnCompletion = false
         animation.beginTime = beginTime
-        timeLabel.layer.addAnimation(animation, forKey: "animation")
+        timeLabel.layer.add(animation, forKey: "animation")
         self.layer.addSublayer(timeLabel.layer)
         
 //        let shakeAnimation = CABasicAnimation(keyPath: "transform.translation.x")
