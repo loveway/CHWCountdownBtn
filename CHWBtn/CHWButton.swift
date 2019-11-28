@@ -54,7 +54,7 @@ class CHWButton: UIButton {
     }
 
 //    开启定时器
-    func startCountDown() {
+    @objc func startCountDown() {
         self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(countDown), userInfo: nil, repeats: true)
         self.backgroundColor = enabled_bgColor
 //        self.setTitleColor(UIColor.blackColor(), forState: UIControlState.Disabled)
@@ -72,7 +72,7 @@ class CHWButton: UIButton {
     }
     
 //    倒计时开始
-    func countDown() {
+    @objc func countDown() {
         self.startCount -= 1
         timeLabel.text = "\(self.startCount)"
         
@@ -115,7 +115,7 @@ class CHWButton: UIButton {
         let animation = CAAnimationGroup()
         
         animation.animations = [scaleAnimation, opacityAnimaton]
-        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
+        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.linear)
         animation.duration = duration
         animation.repeatCount = HUGE
         animation.isRemovedOnCompletion = false
@@ -135,7 +135,7 @@ class CHWButton: UIButton {
         // Rotate animation
         let rotateAnimation  = CABasicAnimation(keyPath: "transform.rotation.z")
         rotateAnimation.fromValue = NSNumber(value: 0)
-        rotateAnimation.toValue = NSNumber(value: M_PI * 2)
+        rotateAnimation.toValue = NSNumber(value: Double.pi * 2)
         rotateAnimation.duration = duration;
         
         // Scale animation
@@ -159,10 +159,10 @@ class CHWButton: UIButton {
         let animation = CAAnimationGroup()
         
         animation.animations = [rotateAnimation, scaleAnimation, opacityAnimaton, scaleAnimation2]
-        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
+        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.linear)
         animation.duration = duration
         animation.repeatCount = HUGE
-        animation.fillMode = kCAFillModeForwards
+        animation.fillMode = CAMediaTimingFillMode.forwards
         animation.isRemovedOnCompletion = false
         animation.beginTime = beginTime
         timeLabel.layer.add(animation, forKey: "animation")
